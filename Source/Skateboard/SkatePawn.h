@@ -23,6 +23,9 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+
+
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -30,7 +33,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	
+	// Static mesh root representing the skateboard
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UStaticMeshComponent* Skateboard;
 
@@ -40,9 +43,23 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UCameraComponent* Camera;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	UArrowComponent* ArrowComp;
-
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skate") bool	bIsOnGround = true;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skate") bool 	bIsOnRamp = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skate") bool 	bIsJumping = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skate") FVector 	UpVector = FVector::UpVector; // default (0,0,1)
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skate") FVector 	RampInitialVelocity = FVector::UpVector; // default (0,0,1)
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skate") FRotator 	RampInitialRotation = FRotator::ZeroRotator;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skate") FRotator 	RampInAirRotation = FRotator::ZeroRotator;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skate") float 	SkateSpeed = 600.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+UArrowComponent* ArrowComp;
+
 };
