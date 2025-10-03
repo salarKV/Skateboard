@@ -45,6 +45,29 @@ void ASkatePawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+
+	if (APlayerController* PC = GetWorld()->GetFirstPlayerController())
+	{
+		if (!PC->IsInputKeyDown(EKeys::S))
+		{
+			if (Skateboard)
+			{
+				// Forward direction of skateboard, normalized
+				FVector Forward = Skateboard->GetForwardVector().GetSafeNormal();
+
+				// Constant horizontal velocity (X and Y only)
+				FVector DesiredVelocity = Forward * 600.0f;
+
+				// Preserve Z velocity from physics
+				float ZValue = Skateboard->GetPhysicsLinearVelocity().Z;
+
+				// Apply final velocity
+				FVector FinalVelocity(DesiredVelocity.X, DesiredVelocity.Y, ZValue);
+				Skateboard->SetPhysicsLinearVelocity(FinalVelocity, false);
+			}
+		}
+	}
+
 }
 
 // Called to bind functionality to input
