@@ -145,6 +145,18 @@ void ASkatePawn::Tick(float DeltaTime)
 	}
 
 
+	// Keep the spring arm above the skateboard
+	if (Skateboard && SpringArm)
+	{
+		// Get the world location of the Skateboard (our root)
+		FVector BoardLocation = Skateboard->GetComponentLocation();
+
+		// Get X and Y from the board, and Z = Board.Z + 100
+		FVector NewLocation(BoardLocation.X, BoardLocation.Y, BoardLocation.Z + 100.0f);
+
+		// Update the SpringArm location
+		SpringArm->SetWorldLocation(NewLocation);
+	}
 }
 
 // Called to bind functionality to input
