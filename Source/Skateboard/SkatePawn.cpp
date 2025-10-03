@@ -68,6 +68,29 @@ void ASkatePawn::Tick(float DeltaTime)
 		}
 	}
 
+
+
+	if (APlayerController* PC = GetWorld()->GetFirstPlayerController())
+	{
+		bool bIsAPressed = PC->IsInputKeyDown(EKeys::A);
+		bool bIsDPressed = PC->IsInputKeyDown(EKeys::D);
+
+		float VelocityLength = Skateboard->GetPhysicsLinearVelocity().Size();
+
+		if ((bIsAPressed || bIsDPressed) && VelocityLength > 10.0f)
+		{
+			// Get current angular velocity
+			FVector AngularVel = Skateboard->GetPhysicsAngularVelocityInDegrees();
+
+			// Overwrite Z depending on key
+			AngularVel.Z = bIsDPressed ? 120.0f : -120.0f;
+
+			// Apply new angular velocity (replace, not add)
+			Skateboard->SetPhysicsAngularVelocityInDegrees(AngularVel, false);
+		}
+	}
+
+
 }
 
 // Called to bind functionality to input
