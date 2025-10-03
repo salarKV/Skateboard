@@ -2,6 +2,9 @@
 
 
 #include "SkatePawn.h"
+#include "DrawDebugHelpers.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "Engine/EngineTypes.h"
 
 
 // Sets default values
@@ -47,8 +50,33 @@ void ASkatePawn::Tick(float DeltaTime)
 
 
 
+	// Ground detection using sphere trace
+	if (!ArrowComp || !GetWorld())
+	{
+		return;
+	}
 
+	FVector TraceStart = ArrowComp->GetComponentLocation();
+	FVector TraceEnd = TraceStart + ArrowComp->GetForwardVector() * 60.0f;
 
+	float Radius = bIsOnGround ? 12.0f : 4.0f;
+
+	TArray<FHitResult> HitResults;
+	TArray<AActor*> ActorsToIgnore;
+	ActorsToIgnore.Add(this); // Ignore self
+
+	bIsOnGround = UKismetSystemLibrary::SphereTraceMulti(
+		GetWorld(),
+		TraceStart,
+		TraceEnd,
+		Radius,
+		UEngineTypes::ConvertToTraceType(ECC_Visibility),
+		true,                         // trace complex (needed for BSP/geometry)
+		ActorsToIgnore,
+		EDrawDebugTrace::ForOneFrame, // debug
+		HitResults,
+		true                          
+	) && HitResults.Num() > 0;
 
 
 	// Move forward using constant velocity, unless S is pressed

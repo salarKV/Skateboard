@@ -43,4 +43,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UArrowComponent* ArrowComp;
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skate") bool	bIsOnGround = true;
 };
