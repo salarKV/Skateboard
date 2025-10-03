@@ -46,6 +46,12 @@ void ASkatePawn::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 
+
+
+
+
+
+	// Move forward using constant velocity, unless S is pressed
 	if (APlayerController* PC = GetWorld()->GetFirstPlayerController())
 	{
 		if (!PC->IsInputKeyDown(EKeys::S))
@@ -69,7 +75,7 @@ void ASkatePawn::Tick(float DeltaTime)
 	}
 
 
-
+	// Turn skateboard using angular velocity, only if moving
 	if (APlayerController* PC = GetWorld()->GetFirstPlayerController())
 	{
 		bool bIsAPressed = PC->IsInputKeyDown(EKeys::A);
@@ -87,6 +93,26 @@ void ASkatePawn::Tick(float DeltaTime)
 
 			// Apply new angular velocity (replace, not add)
 			Skateboard->SetPhysicsAngularVelocityInDegrees(AngularVel, false);
+		}
+	}
+
+
+	
+	// turn skateboard using AddLocalRotation, Turn in place
+	if (APlayerController* PC = GetWorld()->GetFirstPlayerController())
+	{
+		bool bIsAPressed = PC->IsInputKeyDown(EKeys::A);
+		bool bIsDPressed = PC->IsInputKeyDown(EKeys::D);
+
+		float VelocityLength = Skateboard->GetPhysicsLinearVelocity().Size();
+
+		if ((bIsAPressed || bIsDPressed) && VelocityLength <= 10.0f)
+		{
+			// Select rotation direction
+			float YawStep = bIsDPressed ? 1.0f : -1.0f;
+
+			// Add relative rotation (local Z)
+			Skateboard->AddLocalRotation(FRotator(0.f, YawStep, 0.f));
 		}
 	}
 
