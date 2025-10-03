@@ -37,6 +37,9 @@ void ASkatePawn::BeginPlay()
 	
 }
 
+
+
+
 // Called every frame
 void ASkatePawn::Tick(float DeltaTime)
 {
