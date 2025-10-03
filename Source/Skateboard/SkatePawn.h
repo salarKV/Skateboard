@@ -10,6 +10,12 @@
 #include "Camera/CameraComponent.h"
 #include "SkatePawn.generated.h"
 
+
+
+// Delegate signature: bool parameter tells if pawn is on ground
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGroundStateChanged, bool, bIsOnGround);
+
+
 UCLASS()
 class SKATEBOARD_API ASkatePawn : public APawn
 {
@@ -18,6 +24,10 @@ class SKATEBOARD_API ASkatePawn : public APawn
 public:
 	// Sets default values for this pawn's properties
 	ASkatePawn();
+
+	// Event Dispatcher
+	UPROPERTY(BlueprintAssignable, Category = "Events")
+	FOnGroundStateChanged OnGroundStateChanged;
 
 protected:
 	// Called when the game starts or when spawned
@@ -49,6 +59,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skate") bool 	bIsJumping = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skate") bool 	bPrevIsOnGround = true;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skate") FVector 	UpVector = FVector::UpVector; // default (0,0,1)
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skate") FVector 	RampInitialVelocity = FVector::UpVector; // default (0,0,1)
@@ -58,6 +70,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skate") FRotator 	RampInAirRotation = FRotator::ZeroRotator;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skate") float 	SkateSpeed = 600.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skate") float 	MidAirRotation = 0.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 UArrowComponent* ArrowComp;
